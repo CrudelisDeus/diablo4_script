@@ -1,0 +1,7 @@
+<RCC>
+  <qresource>
+    <file>ui/logo_active.svg</file>
+    <file>ui/logo.png</file>
+    <file>ui/logo.svg</file>
+  </qresource>
+</RCC>
