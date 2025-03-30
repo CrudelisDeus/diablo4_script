@@ -2,11 +2,13 @@ import sys
 from PySide6 import QtCore
 from PySide6.QtWidgets import QApplication, QMainWindow
 from PySide6.QtGui import QIcon
+
 import json
 import os
 import keyboard
 import mouse
 import time
+
 from ui_main import Ui_MainWindow
 
 class GameActions:
@@ -53,7 +55,6 @@ class App(QMainWindow, Ui_MainWindow):
         super().__init__()
         self.setupUi(self)
 
-        # Координаты инвентаря
         self.inventory_coords = [
             (1292, 760), (1348, 760), (1407, 760),
             (1458, 763), (1517, 761), (1568, 762),
