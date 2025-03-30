@@ -1,0 +1,56 @@
+name: Build and Release Diablo 4 Script
+
+on:
+  push:
+    tags:
+      - 'v*'
+
+jobs:
+  build:
+    runs-on: windows-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python 3.11
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+
+      - name: Install dependencies
+        run: |
+          pip install -r requirements.txt
+          pip install pyinstaller keyboard mouse pyside6
+
+      - name: Generate UI and resource files
+        run: |
+          pyside6-uic ui/main.ui -o ui_main.py
+          pyside6-rcc rc.qrc -o rc_rc.py
+
+      - name: Build executable
+        run: |
+          pyinstaller --name "D4 Script" --windowed --onefile --add-data "rc_rc.py;." --add-data "keyboard.json;." --add-data "icons/*;icons" --icon "ui/logo.ico" main.py
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: D4-Script
+          path: dist/D4 Script.exe
+
+  release:
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Download built EXE
+        uses: actions/download-artifact@v4
+        with:
+          name: D4-Script
+          path: dist
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          files: dist/D4 Script.exe
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
